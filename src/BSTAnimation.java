@@ -8,6 +8,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
+import java.util.ArrayList;
+
 public class BSTAnimation extends Application {
     @Override // Override the start method in the Application class
     public void start(Stage primaryStage) {
@@ -22,9 +24,16 @@ public class BSTAnimation extends Application {
         tfKey.setAlignment(Pos.BASELINE_RIGHT);
         Button btInsert = new Button("Insert");
         Button btDelete = new Button("Delete");
+        Button btSearch = new Button("Search");
+        Button btInorder = new Button("Inorder");
+        Button btPreorder = new Button("Preorder");
+        Button btPostorder = new Button("Postorder");
+        Button btBreadthFirst = new Button("Breadth-fitst");
+        Button btHeight = new Button("Height");
         HBox hBox = new HBox(5);
         hBox.getChildren().addAll(new Label("Enter a key: "),
-                tfKey, btInsert, btDelete);
+                tfKey, btInsert, btDelete, btSearch, btInorder,
+                btPreorder, btPostorder, btBreadthFirst, btHeight);
         hBox.setAlignment(Pos.CENTER);
         pane.setBottom(hBox);
 
@@ -53,6 +62,22 @@ public class BSTAnimation extends Application {
                 view.setStatus(key + " is deleted from the tree");
             }
         });
+
+        btSearch.setOnAction(e -> {
+            int key = Integer.parseInt(tfKey.getText());
+            ArrayList path = tree.path(key);
+
+            System.out.println("searching for "+key);
+        });
+
+        btInorder.setOnAction(e -> { //left root right
+            ArrayList = getInOrder();
+        });
+
+        private ArrayList<TreeNode<E>> getInOrder() {
+            ArrayList list = new ArrayList();
+            return list;
+        }
 
         // Create a scene and place the pane in the stage
         Scene scene = new Scene(pane, 450, 250);
