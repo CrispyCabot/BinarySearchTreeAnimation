@@ -4,6 +4,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
+
 public class BTView extends Pane {
     private BST<Integer> tree = new BST<>();
     private double radius = 15; // Tree node radius
@@ -19,34 +21,41 @@ public class BTView extends Pane {
     }
 
     public void displayTree() {
+        displayShadedTree(new ArrayList<Integer>()); //Displays tree with empty list so it will be normal
+    }
+
+    public void displayShadedTree(ArrayList<Integer> path) {
         this.getChildren().clear(); // Clear the pane
         if (tree.getRoot() != null) {
             // Display tree recursively
             displayTree(tree.getRoot(), getWidth() / 2, vGap,
-                    getWidth() / 4);
+                    getWidth() / 4, path);
         }
     }
 
     /** Display a subtree rooted at position (x, y) */
     private void displayTree(BST.TreeNode<Integer> root,
-                             double x, double y, double hGap) {
+                             double x, double y, double hGap, ArrayList<Integer> path) {
         if (root.left != null) {
             // Draw a line to the left node
             getChildren().add(new Line(x - hGap, y + vGap, x, y));
             // Draw the left subtree recursively
-            displayTree(root.left, x - hGap, y + vGap, hGap / 2);
+            displayTree(root.left, x - hGap, y + vGap, hGap / 2, path);
         }
 
         if (root.right != null) {
             // Draw a line to the right node
             getChildren().add(new Line(x + hGap, y + vGap, x, y));
             // Draw the right subtree recursively
-            displayTree(root.right, x + hGap, y + vGap, hGap / 2);
+            displayTree(root.right, x + hGap, y + vGap, hGap / 2, path);
         }
 
         // Display a node
         Circle circle = new Circle(x, y, radius);
-        circle.setFill(Color.WHITE);
+        if (path.contains(root.element))
+            circle.setFill(Color.ORANGE);
+        else
+            circle.setFill(Color.WHITE);
         circle.setStroke(Color.BLACK);
         this.getChildren().addAll(circle,
                 new Text(x - 4, y + 4, root.element.toString()));

@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class BST<E extends Comparable<E>> implements Tree<E> {
     protected TreeNode<E> root;
     protected int size = 0;
@@ -10,6 +13,104 @@ public class BST<E extends Comparable<E>> implements Tree<E> {
     public BST(E[] objects) {
         for (int i = 0; i < objects.length; i++)
             add(objects[i]);
+    }
+
+    //Gets the height of the tree
+    public int height() {
+        int height = -1;
+        int height2 = -1;
+        TreeNode<E> current = root;
+        if (current != null) {
+            height++;
+            height2 = height;
+            if (current.left != null)
+                height += heightHelper(current.left);
+            if (current.right != null)
+                height2 += heightHelper(current.right);
+        }
+        return (height > height2 ? height : height2);
+    }
+
+    //Recursion used to check all the branches of the tree
+    public int heightHelper(TreeNode<E> node) {
+        int height = 1;
+        int height2 = 1;
+        if (node.left != null)
+            height += heightHelper(node.left);
+        if (node.right != null)
+            height2 += heightHelper(node.right);
+        return (height > height2 ? height : height2);
+    }
+
+    //Gets the inorderlist using the InorderIterator class already created
+    public java.util.List<E> inorderList() {
+        if (root == null)
+            return new ArrayList();
+        InorderIterator iter = new InorderIterator();
+        return iter.list;
+    }
+
+    //Recursively creates preOrder list: ordered root left right
+    public java.util.List<E> preorderList() {
+        if (root == null)
+            return new ArrayList();
+        TreeNode<E> current = root;
+        ArrayList<E> list = new ArrayList();
+        list.add(current.element);
+        if (current.left != null)
+            preorderList(current.left, list);
+        if (current.right != null)
+            preorderList(current.right, list);
+        return list;
+    }
+
+    //preorderList helper method
+    public void preorderList(TreeNode<E> node, ArrayList<E> list) {
+        list.add(node.element);
+        if (node.left != null)
+            preorderList(node.left, list);
+        if (node.right != null)
+            preorderList(node.right, list);
+    }
+
+    //Recursively creates postorder list: ordered left right root
+    public java.util.List<E> postorderList() {
+        if (root == null) //If tree is empty returns empty list
+            return new ArrayList();
+        TreeNode<E> current = root;
+        ArrayList<E> list = new ArrayList();
+        if (current.left != null)
+            postorderList(current.left, list);
+        if (current.right != null)
+            postorderList(current.right, list);
+        list.add(current.element);
+        return list;
+    }
+
+    //postorderList helper method
+    public void postorderList(TreeNode<E> node, ArrayList<E> list) {
+        if (node.left != null)
+            postorderList(node.left, list);
+        if (node.right != null)
+            postorderList(node.right, list);
+        list.add(node.element);
+    }
+
+    public java.util.List<E> breadthFirstOrderList() {
+        if (root == null) //If tree is empty returns empty list
+            return new ArrayList();
+        LinkedList<TreeNode<E>> q = new LinkedList();
+        ArrayList<E> list = new ArrayList();
+        q.add(root);
+        while (q.size() > 0) {
+            TreeNode<E> node = q.pollFirst();
+            list.add(node.element);
+            if (node.left != null)
+                q.add(node.left);
+            if (node.right != null)
+                q.add(node.right);
+        }
+        return list;
     }
 
     @Override /** Returns true if the element is in the tree */
